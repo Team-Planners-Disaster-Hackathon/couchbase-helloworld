@@ -22,6 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, '../public')));
+
 // Import routes
 import todoRoutes from './routes/todoRoutes';
 import healthRoutes from './routes/healthRoutes';
@@ -29,16 +32,20 @@ import healthRoutes from './routes/healthRoutes';
 app.use('/api/todos', todoRoutes);
 app.use('/api/health', healthRoutes);
 
-// Root route
-app.get('/', (req, res) => {
+// API info route
+app.get('/api', (req, res) => {
   res.json({
-    message: 'Welcome to the TypeScript Express API',
+    message: 'Welcome to the API',
     endpoints: {
       health: '/api/health',
-      users: '/api/users',
       todos: '/api/todos'
     }
   });
+});
+
+// Serve the client application at the root route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Start server with Ottoman initialization

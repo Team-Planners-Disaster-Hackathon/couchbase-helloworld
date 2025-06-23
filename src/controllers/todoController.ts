@@ -1,29 +1,40 @@
 import { Request, Response } from 'express';
-import {  ApiResponse} from '../types';
-import { createTodo, getAllTodos, getTodoById, updateTodo } from '../actions/todo.actions';
+import { ApiResponse } from '../types';
+import { createTodo, getAllTodos, getTodoById, updateTodo as updateTodoAction, deleteTodo as deleteTodoAction } from '../actions/todo.actions';
 
-// GET all products
+// GET all todos
 export const getTodos = async (req: Request, res: Response) => {
   try {
-    // Mock data for demonstration
-   const todos = await getAllTodos();
+    const todos = await getAllTodos();
     
-    res.status(200).json(todos.rows);
+    const response: ApiResponse<any[]> = {
+      success: true,
+      data: todos
+    };
+    
+    res.status(200).json(response);
   } catch (error) {
+    console.error('Error getting todos:', error);
     res.status(500).json({
       success: false,
-      error: 'Server Error'
+      error: 'Failed to retrieve todos'
     });
   }
 };
 
-// GET product by ID
+// GET todo by ID
 export const getTodoByID = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     
-    // Mock data for demonstration
-    const todo = await getTodoById(id)
+    const todo = await getTodoById(id);
+    
+    if (!todo) {
+      return res.status(404).json({
+        success: false,
+        error: 'Todo not found'
+      });
+    }
     
     const response: ApiResponse<any> = {
       success: true,
@@ -32,9 +43,10 @@ export const getTodoByID = async (req: Request, res: Response) => {
     
     res.status(200).json(response);
   } catch (error) {
+    console.error('Error getting todo by ID:', error);
     res.status(500).json({
       success: false,
-      error: 'Server Error'
+      error: 'Failed to retrieve todo'
     });
   }
 };
@@ -68,16 +80,16 @@ export const createNewTodo = async (req: Request, res: Response) => {
   }
 };
 
-// PUT update product
-export const updateProduct = async (req: Request, res: Response) => {
+// PUT update todo
+export const updateTodoController = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const { title, description, completed } = req.body;
     
-    const todo = await updateTodo(id, { title, description, completed });
+    const todo = await updateTodoAction(id, { title, description, completed });
     
     
-    const response = {
+    const response: ApiResponse<any> = {
       success: true,
       data: todo
     };
@@ -91,17 +103,28 @@ export const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
-// DELETE product
-export const deleteProduct = (req: Request, res: Response) => {
+// DELETE todo
+export const deleteTodo = async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     
-    // Mock response for demonstration
-    res.status(200).json({
+    const success = await deleteTodoAction(id);
+    
+    if (!success) {
+      return res.status(404).json({
+        success: false,
+        error: 'Todo not found or could not be deleted'
+      });
+    }
+    
+    const response: ApiResponse<any> = {
       success: true,
       data: {}
-    });
+    };
+    
+    res.status(200).json(response);
   } catch (error) {
+    console.error('Error deleting todo:', error);
     res.status(500).json({
       success: false,
       error: 'Server Error'

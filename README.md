@@ -1,10 +1,14 @@
-# TypeScript Express API with Couchbase Integration
+# TypeScript Express API with Couchbase Integration and Todo Client
 
-A RESTful API built with TypeScript, Express, and Node.js that integrates with Couchbase using the Ottoman ODM. This API provides Todo management functionality with a clean, modular architecture.
+A full-stack application built with TypeScript, Express, and Node.js that integrates with Couchbase using the Ottoman ODM. This application provides Todo management functionality with a clean, modular architecture and includes a lightweight client interface.
 
 ## Project Structure
 
 ```
+├── public/           # Client-side application
+│   ├── index.html    # Main HTML file
+│   ├── app.js        # Client-side JavaScript
+│   └── styles.css    # CSS styles
 ├── src/
 │   ├── actions/      # Business logic and data operations
 │   ├── controllers/  # Route controllers
@@ -102,3 +106,22 @@ If the Couchbase connection fails, the API will still run but will use a mock im
 ## Error Handling
 
 The API includes error handling middleware that catches and formats errors appropriately. All responses follow a consistent format defined in the `ApiResponse` interface.
+
+## Client Application
+
+A lightweight client application is included in the `public` directory and is served at the root route (`/`). The client application provides a user-friendly interface for interacting with the Todo API.
+
+### Client Features
+
+- **Modern UI with Bootstrap**: Clean, responsive design that works on mobile and desktop
+- **Full CRUD Operations**: Create, read, update, and delete todos
+- **Real-time Status**: Visual indicators for connection status and completed todos
+- **Error Handling**: Graceful handling of API errors with retry options
+
+### Client-Server Integration
+
+The client application communicates with the API endpoints to perform CRUD operations on todos. The server serves static files from the `public` directory and the client application at the root route.
+
+### Accessing the Client
+
+Once the server is running, you can access the client application by navigating to `http://localhost:8080` in your web browser.

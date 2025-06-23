@@ -1,21 +1,21 @@
 import express from 'express';
-import * as productController from '../controllers/todoController';
+import * as todoController from '../controllers/todoController';
 
 const router = express.Router();
 
-// GET all products
-router.get('/', productController.getTodos);
+// GET all todos
+router.get('/', todoController.getTodos);
 
-// GET product by ID
-router.get('/:id', productController.getTodoByID);
+// GET todo by ID
+router.get('/:id', todoController.getTodoByID);
 
-// POST create new product
-router.post('/', productController.createNewTodo);
+// POST create new todo
+router.post('/', todoController.createNewTodo);
 
-// PUT update product
-router.put('/:id', productController.updateProduct);
+// PUT update todo
+router.put('/:id', todoController.updateTodoController);
 
-// DELETE product
-router.delete('/:id', productController.deleteProduct);
+// DELETE todo
+router.delete('/:id', todoController.deleteTodo);
 
 export default router;
